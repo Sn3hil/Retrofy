@@ -5,6 +5,7 @@
   CLIENT_SECRET=
   REDIRECT_URI=http://localhost:8888/callback
 
-3. use npm install to install dependencies
-4. use npm start to run and test
-5. use electron-packager to make executable(.exe) file
+3. use "npm install" to install dependencies
+4. use "npm start" to run and test
+5. use "npx electron-packager . Retrofy --platform=win32 --arch=x64 --out=dist --icon=icon.ico"
+ to make executable(.exe) file
