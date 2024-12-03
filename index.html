@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotify Controller</title>
+    <style>
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background-color: black;
+            color: lime;
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            background: lime;
+            color: black;
+            cursor: pointer;
+        }
+        input[type="range"] {
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Retro Spotify Controller</h1>
+    
+    <!-- Login Button -->
+    <button id="login" style="display :flex ; justify-content:center ; align-items:center" ;>Login With Spotify</button>
+    
+    <!-- Player Controls -->
+    <div id="controls" style="display: none;">
+        <button id="play-pause">Play/Pause</button>
+        <button id="next">Next</button>
+        <button id="prev">Previous</button>
+        <input type="range" id="volume" min="0" max="100">
+    </div>
+
+    <script>
+        // Check if access token exists in localStorage
+        const accessToken = localStorage.getItem('access_token');
+        
+        // If access token exists, show controls
+        if (accessToken) {
+            document.getElementById('controls').style.display = 'block';
+        } else {
+            // If no access token, show login button
+            document.getElementById('login').style.display = 'block';
+        }
+
+        // Login button logic
+        document.getElementById('login').addEventListener('click', function() {
+            window.location.href = 'http://localhost:8888/login'; // Redirect to backend login route
+        });
+
+        // When the page loads, try to fetch playback info if the token exists
+        if (accessToken) {
+            fetchPlayback();
+        }
+
+        // Fetch current playback info
+        async function fetchPlayback() {
+            try {
+                const response = await fetch('http://localhost:8888/playback', {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch playback info');
+                }
+
+                const playbackData = await response.json();
+                console.log(playbackData); // Display playback data in console
+            } catch (error) {
+                console.error('Error fetching playback info:', error);
+            }
+        }
+
+        // Play/Pause button logic
+        document.getElementById('play-pause').addEventListener('click', function() {
+            togglePlayback();
+        });
+
+        // Play the current track
+        async function togglePlayback() {
+            try {
+                const response = await fetch('http://localhost:8888/playback', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to toggle playback');
+                }
+                console.log('Toggled playback');
+            } catch (error) {
+                console.error('Error toggling playback:', error);
+            }
+        }
+
+        // Next button logic
+        document.getElementById('next').addEventListener('click', function() {
+            skipTrack('next');
+        });
+
+        // Previous button logic
+        document.getElementById('prev').addEventListener('click', function() {
+            skipTrack('previous');
+        });
+
+        // Skip track function
+        async function skipTrack(direction) {
+            try {
+                const response = await fetch(`http://localhost:8888/${direction}`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Failed to skip ${direction} track`);
+                }
+                console.log(`Skipped ${direction} track`);
+            } catch (error) {
+                console.error(`Error skipping ${direction} track:`, error);
+            }
+        }
+
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+# Node.js dependencies
+node_modules/
+
+# Environment variables
+.env
+
+# Optional: log files
+*.log
+
+# Operating system files (e.g., macOS, Windows)
+.DS_Store
+Thumbs.db
+
+# IDE files (e.g., VS Code)
+.vscode/
