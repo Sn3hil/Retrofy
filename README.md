@@ -1,4 +1,4 @@
-1. Head over to spotify developer dashboard and get client id and secret id
+1. Head over to Spotify developer dashboard and make a new app to get Client Id and Client Secret
 
 2. Make .env file in root and include :-
   CLIENT_ID=
